@@ -380,7 +380,25 @@ specific language governing permissions and limitations under the License.
 				<xs:attribute name="Side"  type="enumSide" use="required"/><!--<< @brief -->
 			</xs:extension>
 		</xs:complexContent>
-	</xs:complexType>		
+	</xs:complexType>	
+
+	<!-- @brief start or stop a sleep action.  -->
+	<xs:simpleType name="enumSleepState">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Alseep"/>
+			<xs:enumeration value="Awake"/>
+		</xs:restriction>
+	</xs:simpleType>	
+
+	<!-- @brief put the patient into a sleep state. Can also be used to awaken the patient from a sleep state. -->
+    <xs:complexType name="SleepData">
+		<xs:complexContent>
+			<xs:extension base="PatientActionData">
+                <xs:attribute name="SleepState" type="enumSleepState" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
 
 	<!-- @brief Various methods of substance administration. Currently unsupported methods are commented out.-->
 	<xs:simpleType name="enumBolusAdministration">
