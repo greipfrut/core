@@ -182,8 +182,8 @@ bool SEPatientActionCollection::ProcessAction(const SEPatientAction& action)
 //-------------------------------------------------------------------------------
 bool SEPatientActionCollection::ProcessAction(const CDM::PatientActionData& action)
 {
-  const CDM::PatientAssessmentRequestData* patientAss = dynamic_cast<const CDM::PatientAssessmentRequestData*>(&action);
-  if (patientAss != nullptr) {
+  const CDM::PatientAssessmentRequestData* patientAssessment = dynamic_cast<const CDM::PatientAssessmentRequestData*>(&action);
+  if (patientAssessment != nullptr) {
     // TODO just add this to a list?
     // Not doing anything with this, assessment actions
     // are currently only being handled by the Engine ScenarioExec methods.
