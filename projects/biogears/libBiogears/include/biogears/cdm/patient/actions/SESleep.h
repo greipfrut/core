@@ -42,7 +42,8 @@ public:
 
 
   virtual bool HasSleepState() const;
-  virtual CDM::enumSleepState GetSleepState() const;
+  virtual bool IsAsleep() const;
+  virtual CDM::enumSleepState GetSleepState();
   virtual void SetSleepState(CDM::enumSleepState::value t);
 
   virtual void ToString(std::ostream& str) const override;
