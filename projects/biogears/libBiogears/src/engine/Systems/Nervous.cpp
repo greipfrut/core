@@ -114,6 +114,7 @@ void Nervous::Initialize()
   m_SympatheticSinoatrialSignalBaseline_Hz = 4.5;
   m_SympatheticPeripheralSignalFatigue = 0.0;
   m_VagalSignalBaseline_Hz = 3.75;
+  m_WakeTime_min = 0.0;
 
   GetHeartRateScale().SetValue(1.0);
   GetHeartElastanceScale().SetValue(1.0);
@@ -184,6 +185,7 @@ bool Nervous::Load(const CDM::BioGearsNervousSystemData& in)
   m_SympatheticSinoatrialSignalBaseline_Hz = in.SympatheticSinoatrialSignalBaseline();
   m_SympatheticPeripheralSignalFatigue = in.SympatheticPeripheralSignalFatigue();
   m_VagalSignalBaseline_Hz = in.VagalSignalBaseline();
+  m_WakeTime_min = in.WakeTime();
 
   return true;
 }
@@ -242,6 +244,8 @@ void Nervous::Unload(CDM::BioGearsNervousSystemData& data) const
   data.SympatheticSinoatrialSignalBaseline(m_SympatheticSinoatrialSignalBaseline_Hz);
   data.SympatheticPeripheralSignalFatigue(m_SympatheticPeripheralSignalFatigue);
   data.VagalSignalBaseline(m_VagalSignalBaseline_Hz);
+  data.WakeTime(m_WakeTime_min);
+
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1153,5 +1157,23 @@ void Nervous::SetPupilEffects()
   GetLeftEyePupillaryResponse().GetReactivityModifier().SetValue(leftPupilReactivityResponseLevel);
   GetRightEyePupillaryResponse().GetSizeModifier().SetValue(rightPupilSizeResponseLevel);
   GetRightEyePupillaryResponse().GetReactivityModifier().SetValue(rightPupilReactivityResponseLevel);
+}
+
+//--------------------------------------------------------------------------------------------------
+/// \brief
+/// Cacluates the cumulative sleep debt burden on the patient 
+///
+/// \details
+/// Models for metabolic changes and vigalence and awareness changes are computed here.
+/// These models effect physiology data requests and the tissue system
+//--------------------------------------------------------------------------------------------------
+void Nervous::CalculateSleepEffects()
+{
+    // Calculate metabolic demand 
+
+    //Calculate vigalence metric 
+
+    //Store data 
+   
 }
 }

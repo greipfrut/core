@@ -40,6 +40,7 @@ SEPatientActionCollection::SEPatientActionCollection(SESubstanceManager& substan
   m_LeftNeedleDecompression = nullptr;
   m_RightNeedleDecompression = nullptr;
   m_PericardialEffusion = nullptr;
+  m_Sleep = nullptr;
   m_LeftOpenTensionPneumothorax = nullptr;
   m_LeftClosedTensionPneumothorax = nullptr;
   m_RightOpenTensionPneumothorax = nullptr;
@@ -75,6 +76,7 @@ void SEPatientActionCollection::Clear()
   RemoveLeftNeedleDecompression();
   RemoveRightNeedleDecompression();
   RemovePericardialEffusion();
+  RemoveSleepState();
   RemoveLeftOpenTensionPneumothorax();
   RemoveLeftClosedTensionPneumothorax();
   RemoveRightOpenTensionPneumothorax();
@@ -143,6 +145,8 @@ void SEPatientActionCollection::Unload(std::vector<CDM::ActionData*>& to)
   }
   if (HasPericardialEffusion())
     to.push_back(GetPericardialEffusion()->Unload());
+  if (HasSleepState())
+      to.push_back(GetSleepState()->Unload());
   if (HasLeftClosedTensionPneumothorax())
     to.push_back(GetLeftClosedTensionPneumothorax()->Unload());
   if (HasLeftOpenTensionPneumothorax())
@@ -494,6 +498,18 @@ bool SEPatientActionCollection::ProcessAction(const CDM::PatientActionData& acti
       return true;
     }
     return IsValid(*m_PericardialEffusion);
+  }
+
+  const CDM::SleepData* sleep = dynamic_cast<const CDM::SleepData*>(&action);
+  if (sleep != nullptr) {
+      if (m_Sleep == nullptr)
+          m_Sleep = new SESleep();
+      m_Sleep->Load(*sleep);
+      if (!m_Sleep->IsActive()) {
+          RemoveSleepState();
+          return true;
+      }
+      return IsValid(*m_Sleep);
   }
 
   const CDM::SubstanceAdministrationData* admin = dynamic_cast<const CDM::SubstanceAdministrationData*>(&action);
@@ -993,6 +1009,21 @@ SEPericardialEffusion* SEPatientActionCollection::GetPericardialEffusion() const
 void SEPatientActionCollection::RemovePericardialEffusion()
 {
   SAFE_DELETE(m_PericardialEffusion);
+}
+//-------------------------------------------------------------------------------  
+bool SEPatientActionCollection::HasSleepState() const
+{
+    return m_Sleep == nullptr ? false : true;
+}
+//-------------------------------------------------------------------------------
+SESleep* SEPatientActionCollection::GetSleepState() const
+{
+    return m_Sleep;
+}
+//-------------------------------------------------------------------------------
+void SEPatientActionCollection::RemoveSleepState()
+{
+    SAFE_DELETE(m_Sleep);
 }
 //-------------------------------------------------------------------------------
 bool SEPatientActionCollection::HasTensionPneumothorax() const

@@ -70,6 +70,7 @@ protected:
   void CheckNervousStatus();
   void ChemoreceptorFeedback();
   void SetPupilEffects();
+  void CalculateSleepEffects();
 
   void AfferentResponse();
   void CentralSignalProcess();
@@ -118,6 +119,8 @@ protected:
   double m_SympatheticSinoatrialSignalBaseline_Hz;
   double m_SympatheticPeripheralSignalFatigue;
   double m_VagalSignalBaseline_Hz;
+  double m_WakeTime_min; 
+
 
   // Stateless member variable (Set in SetUp())
   double m_AfferentBaroreceptorAortic_Hz; //*ABA

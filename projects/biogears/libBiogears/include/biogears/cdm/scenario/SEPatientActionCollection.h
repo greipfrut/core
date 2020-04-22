@@ -227,6 +227,7 @@ protected:
   SENeedleDecompression* m_LeftNeedleDecompression;
   SENeedleDecompression* m_RightNeedleDecompression;
   SEPericardialEffusion* m_PericardialEffusion;
+  SESleep* m_Sleep;
   SETensionPneumothorax* m_LeftClosedTensionPneumothorax;
   SETensionPneumothorax* m_LeftOpenTensionPneumothorax;
   SETensionPneumothorax* m_RightClosedTensionPneumothorax;
