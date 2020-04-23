@@ -115,6 +115,7 @@ void Nervous::Initialize()
   m_SympatheticPeripheralSignalFatigue = 0.0;
   m_VagalSignalBaseline_Hz = 3.75;
   m_WakeTime_min = 0.0;
+  m_SleepTime_min = 420.0;   //assume patient has had 8 hours of sleep before simulation starts
 
   GetHeartRateScale().SetValue(1.0);
   GetHeartElastanceScale().SetValue(1.0);
@@ -186,6 +187,8 @@ bool Nervous::Load(const CDM::BioGearsNervousSystemData& in)
   m_SympatheticPeripheralSignalFatigue = in.SympatheticPeripheralSignalFatigue();
   m_VagalSignalBaseline_Hz = in.VagalSignalBaseline();
   m_WakeTime_min = in.WakeTime();
+  m_SleepTime_min = in.SleepTime();
+
 
   return true;
 }
@@ -245,6 +248,8 @@ void Nervous::Unload(CDM::BioGearsNervousSystemData& data) const
   data.SympatheticPeripheralSignalFatigue(m_SympatheticPeripheralSignalFatigue);
   data.VagalSignalBaseline(m_VagalSignalBaseline_Hz);
   data.WakeTime(m_WakeTime_min);
+  data.SleepTime(m_SleepTime_min);
+
 
 }
 
@@ -279,6 +284,9 @@ void Nervous::SetUp()
   m_SympatheticSinoatrialSignal_Hz = 4.0;
   m_SympatheticPeripheralSignal_Hz = 4.8;
   m_VagalSignal_Hz = 0.80;
+  m_WakeTime_min = 0.0;
+  m_SleepTime_min = 420.0;   //assume patient has had 8 hours of sleep before simulation starts
+
 }
 
 void Nervous::AtSteadyState()
@@ -329,6 +337,7 @@ void Nervous::PreProcess()
   CentralSignalProcess();
   EfferentResponse();
   LocalAutoregulation();
+  CalculateSleepEffects();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1169,6 +1178,22 @@ void Nervous::SetPupilEffects()
 //--------------------------------------------------------------------------------------------------
 void Nervous::CalculateSleepEffects()
 {
+  //Calculate wake/sleep ratio to determine parameter scaling
+  SESleep* sleep;
+  CDM::enumSleepState::value sleepstate = sleep->GetSleepState();
+
+  double sleepRatio = m_WakeTime_min / m_SleepTime_min;
+
+  if(sleepstate = CDM::enumSleepState::Awake) {
+    m_WakeTime_min += m_dt_s;
+  }
+  else {
+    m_SleepTime_min += m_dt_s;
+  }
+
+  //calculate sleep time scaling parameters: 
+
+
     // Calculate metabolic demand 
 
     //Calculate vigalence metric 

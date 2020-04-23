@@ -47,41 +47,215 @@
     <DataRequest xsi:type="SubstanceDataRequestData" Substance="Lactate" Name="BloodConcentration" Unit="mg/dL" Precision="3"/>
     <DataRequest xsi:type="PhysiologyDataRequestData" Name="TotalBilirubin" Unit="mg/dL" Precision="3"/>
     <DataRequest xsi:type="PhysiologyDataRequestData" Name="EnergyDeficit" Unit="W" Precision="3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-TissueIntegrity" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-BloodPathogen" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-LocalPathogen" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-LocalMacrophage" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-LocalNeutrophil" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-LocalBarrier" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-Trauma" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-ConstitutiveNOS" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-InducibleNOSPre" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-InducibleNOS" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-MacrophageResting" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-MacrophageActive" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-NeutrophilActive" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-NeutrophilResting" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-Interleukin6" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-Interleukin10" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-Interleukin12" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-Nitrate" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-NitricOxide" Precision = "3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="InflammatoryResponse-TumorNecrosisFactor" Precision = "3"/>
+
 
     <!-- Specific to this scenario -->
 
   </DataRequests>
 
+<!-- Patient wakes up at 5am, eats at 9 -->
   <Action xsi:type="AdvanceTimeData">
-        <Time value="30" unit="s"/>       
+        <Time value="4" unit="hr"/>       
     </Action>
 
+  <!-- This is a 63% carb right meal, see spiegel et al for study details -->
+  <Action xsi:type="ConsumeNutrientsData">
+    <Nutrition>
+      <Name>Food</Name>
+      <Carbohydrate value="111.0" unit="g"/>
+      <Fat value="33.0" unit="g"/>
+      <Protein value="33.0" unit="g"/>
+      <Calcium value="0.5" unit="g"/>
+      <Sodium value="0.75" unit="g"/>
+      <Water value="0.5" unit="L"/>
+    </Nutrition>
+  </Action>
+
+  <Action xsi:type="AdvanceTimeData">
+      <Time value="5" unit="hr"/>       
+  </Action>
+
+  <!-- This is a 63% carb right meal, see spiegel et al for study details -->
+  <Action xsi:type="ConsumeNutrientsData">
+    <Nutrition>
+      <Name>Food</Name>
+      <Carbohydrate value="111.0" unit="g"/>
+      <Fat value="33.0" unit="g"/>
+      <Protein value="33.0" unit="g"/>
+      <Calcium value="0.5" unit="g"/>
+      <Sodium value="0.75" unit="g"/>
+      <Water value="0.5" unit="L"/>
+    </Nutrition>
+  </Action>
+
+  <Action xsi:type="AdvanceTimeData">
+      <Time value="5" unit="hr"/>       
+  </Action>
+
+  <!-- This is a 63% carb right meal, see spiegel et al for study details -->
+  <Action xsi:type="ConsumeNutrientsData">
+    <Nutrition>
+      <Name>Food</Name>
+      <Carbohydrate value="111.0" unit="g"/>
+      <Fat value="33.0" unit="g"/>
+      <Protein value="33.0" unit="g"/>
+      <Calcium value="0.5" unit="g"/>
+      <Sodium value="0.75" unit="g"/>
+      <Water value="0.5" unit="L"/>
+    </Nutrition>
+  </Action>
+
+  <Action xsi:type="AdvanceTimeData">
+      <Time value="6" unit="hr"/>       
+  </Action>
+
+  <!-- Sleep for 4 hours each day during the study -->
   <Action xsi:type="SleepData">
     <SleepState value = "Asleep" />
   </Action>
 
   <Action xsi:type="AdvanceTimeData">
-        <Time value="30" unit="s"/>       
+        <Time value="4" unit="hr"/>       
+    </Action>
+
+  <!-- Sleep for 4 hours each day during the study -->
+  <Action xsi:type="SleepData">
+    <SleepState value = "Awake" />
+  </Action>
+
+<!-- Patient wakes up at 5am, eats at 9 -->
+  <Action xsi:type="AdvanceTimeData">
+        <Time value="4" unit="hr"/>       
+    </Action>
+
+  <!-- This is a 63% carb right meal, see spiegel et al for study details -->
+  <Action xsi:type="ConsumeNutrientsData">
+    <Nutrition>
+      <Name>Food</Name>
+      <Carbohydrate value="111.0" unit="g"/>
+      <Fat value="33.0" unit="g"/>
+      <Protein value="33.0" unit="g"/>
+      <Calcium value="0.5" unit="g"/>
+      <Sodium value="0.75" unit="g"/>
+      <Water value="0.5" unit="L"/>
+    </Nutrition>
+  </Action>
+
+  <Action xsi:type="AdvanceTimeData">
+      <Time value="5" unit="hr"/>       
+  </Action>
+
+  <!-- This is a 63% carb right meal, see spiegel et al for study details -->
+  <Action xsi:type="ConsumeNutrientsData">
+    <Nutrition>
+      <Name>Food</Name>
+      <Carbohydrate value="111.0" unit="g"/>
+      <Fat value="33.0" unit="g"/>
+      <Protein value="33.0" unit="g"/>
+      <Calcium value="0.5" unit="g"/>
+      <Sodium value="0.75" unit="g"/>
+      <Water value="0.5" unit="L"/>
+    </Nutrition>
+  </Action>
+
+  <Action xsi:type="AdvanceTimeData">
+      <Time value="5" unit="hr"/>       
+  </Action>
+
+  <!-- This is a 63% carb right meal, see spiegel et al for study details -->
+  <Action xsi:type="ConsumeNutrientsData">
+    <Nutrition>
+      <Name>Food</Name>
+      <Carbohydrate value="111.0" unit="g"/>
+      <Fat value="33.0" unit="g"/>
+      <Protein value="33.0" unit="g"/>
+      <Calcium value="0.5" unit="g"/>
+      <Sodium value="0.75" unit="g"/>
+      <Water value="0.5" unit="L"/>
+    </Nutrition>
+  </Action>
+
+  <Action xsi:type="AdvanceTimeData">
+      <Time value="6" unit="hr"/>       
+  </Action>
+
+  <!-- Sleep for 4 hours each day during the study -->
+  <Action xsi:type="SleepData">
+    <SleepState value = "Asleep" />
+  </Action>
+
+  <Action xsi:type="AdvanceTimeData">
+        <Time value="4" unit="hr"/>       
+    </Action>
+
+  <!-- Sleep for 4 hours each day during the study -->
+  <Action xsi:type="SleepData">
+    <SleepState value = "Awake" />
+  </Action>
+
+<!-- Patient wakes up at 5am, eats at 9 -->
+  <Action xsi:type="AdvanceTimeData">
+        <Time value="4" unit="hr"/>       
+    </Action>
+
+  <!-- This is a 63% carb right meal, see spiegel et al for study details -->
+  <Action xsi:type="ConsumeNutrientsData">
+    <Nutrition>
+      <Name>Food</Name>
+      <Carbohydrate value="111.0" unit="g"/>
+      <Fat value="33.0" unit="g"/>
+      <Protein value="33.0" unit="g"/>
+      <Calcium value="0.5" unit="g"/>
+      <Sodium value="0.75" unit="g"/>
+      <Water value="0.5" unit="L"/>
+    </Nutrition>
+  </Action>
+
+  <Action xsi:type="AdvanceTimeData">
+      <Time value="5" unit="hr"/>       
+  </Action>
+
+  <!-- This is a 63% carb right meal, see spiegel et al for study details -->
+  <Action xsi:type="ConsumeNutrientsData">
+    <Nutrition>
+      <Name>Food</Name>
+      <Carbohydrate value="111.0" unit="g"/>
+      <Fat value="33.0" unit="g"/>
+      <Protein value="33.0" unit="g"/>
+      <Calcium value="0.5" unit="g"/>
+      <Sodium value="0.75" unit="g"/>
+      <Water value="0.5" unit="L"/>
+    </Nutrition>
+  </Action>
+
+  <Action xsi:type="AdvanceTimeData">
+      <Time value="5" unit="hr"/>       
+  </Action>
+
+  <!-- This is a 63% carb right meal, see spiegel et al for study details -->
+  <Action xsi:type="ConsumeNutrientsData">
+    <Nutrition>
+      <Name>Food</Name>
+      <Carbohydrate value="111.0" unit="g"/>
+      <Fat value="33.0" unit="g"/>
+      <Protein value="33.0" unit="g"/>
+      <Calcium value="0.5" unit="g"/>
+      <Sodium value="0.75" unit="g"/>
+      <Water value="0.5" unit="L"/>
+    </Nutrition>
+  </Action>
+
+  <Action xsi:type="AdvanceTimeData">
+      <Time value="6" unit="hr"/>       
+  </Action>
+
+  <!-- Sleep for 4 hours each day during the study -->
+  <Action xsi:type="SleepData">
+    <SleepState value = "Asleep" />
+  </Action>
+
+  <Action xsi:type="AdvanceTimeData">
+        <Time value="4" unit="hr"/>       
     </Action>
 
 </Scenario>
