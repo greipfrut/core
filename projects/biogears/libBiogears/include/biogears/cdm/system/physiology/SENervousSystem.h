@@ -86,17 +86,35 @@ public:
   const SEPupillaryResponse* GetRightEyePupillaryResponse() const;
   void RemoveRightEyePupillaryResponse();
 
+  bool IsAsleep() const;
+  SEScalar& GetSleepTime();
+  double GetSleepTime() const;
+
+  CDM::enumSleepState::value GetSleepState() const;
+  void SetSleepState(CDM::enumSleepState::value sleep);
+  void InvalidateSleepState();
+  bool HasSleepState() const;
+
+  bool IsAwake() const;
+  SEScalar& GetWakeTime();
+  double GetWakeTime() const;
+
 protected:
   SEScalar* m_ComplianceScale;
   SEScalar* m_HeartRateScale;
   SEScalar* m_HeartElastanceScale;
+  SEPupillaryResponse* m_LeftEyePupillaryResponse;
+  SEPupillaryResponse* m_RightEyePupillaryResponse;
+  SEScalar* m_PainVisualAnalogueScale;
   SEScalar* m_ResistanceScaleExtrasplanchnic;
   SEScalar* m_ResistanceScaleMuscle;
   SEScalar* m_ResistanceScaleMyocardium;
   SEScalar* m_ResistanceScaleSplanchnic;
+  SEScalar* m_SleepTime;
+  SEScalar* m_WakeTime;
+  CDM::enumSleepState::value m_SleepState;
 
-  SEPupillaryResponse* m_LeftEyePupillaryResponse;
-  SEPupillaryResponse* m_RightEyePupillaryResponse;
-  SEScalar* m_PainVisualAnalogueScale;
+
+
 };
 }

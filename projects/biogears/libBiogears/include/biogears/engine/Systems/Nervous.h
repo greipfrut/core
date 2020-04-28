@@ -121,6 +121,7 @@ protected:
   double m_VagalSignalBaseline_Hz;
   double m_WakeTime_min;
   double m_SleepTime_min;
+  CDM::enumSleepState::value m_SleepState;
 
 
 

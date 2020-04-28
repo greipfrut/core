@@ -42,7 +42,6 @@ public:
 
 
   virtual bool HasSleepState() const;
-  virtual bool IsAsleep() const;
   virtual CDM::enumSleepState GetSleepState();
   virtual void SetSleepState(CDM::enumSleepState::value t);
 

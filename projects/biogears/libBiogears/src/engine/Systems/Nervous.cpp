@@ -74,6 +74,7 @@ void Nervous::Initialize()
   BioGearsSystem::Initialize();
   m_FeedbackActive = false;
   m_blockActive = false;
+  m_SleepState = CDM::enumSleepState::Awake;   //patient is always awake
 
   m_AfferentChemoreceptor_Hz = 3.55;
   m_AfferentPulmonaryStretchReceptor_Hz = 12.0;
@@ -114,8 +115,7 @@ void Nervous::Initialize()
   m_SympatheticSinoatrialSignalBaseline_Hz = 4.5;
   m_SympatheticPeripheralSignalFatigue = 0.0;
   m_VagalSignalBaseline_Hz = 3.75;
-  m_WakeTime_min = 0.0;
-  m_SleepTime_min = 420.0;   //assume patient has had 8 hours of sleep before simulation starts
+
 
   GetHeartRateScale().SetValue(1.0);
   GetHeartElastanceScale().SetValue(1.0);
@@ -129,6 +129,8 @@ void Nervous::Initialize()
   GetRightEyePupillaryResponse().GetSizeModifier().SetValue(0);
   GetRightEyePupillaryResponse().GetReactivityModifier().SetValue(0);
   GetPainVisualAnalogueScale().SetValue(0.0);
+  GetWakeTime().SetValue(0.0);
+  GetSleepTime().SetValue(420.0);   //assume patient has had 8 hours of sleep before simulation starts
 }
 
 bool Nervous::Load(const CDM::BioGearsNervousSystemData& in)
@@ -186,9 +188,6 @@ bool Nervous::Load(const CDM::BioGearsNervousSystemData& in)
   m_SympatheticSinoatrialSignalBaseline_Hz = in.SympatheticSinoatrialSignalBaseline();
   m_SympatheticPeripheralSignalFatigue = in.SympatheticPeripheralSignalFatigue();
   m_VagalSignalBaseline_Hz = in.VagalSignalBaseline();
-  m_WakeTime_min = in.WakeTime();
-  m_SleepTime_min = in.SleepTime();
-
 
   return true;
 }
@@ -247,10 +246,6 @@ void Nervous::Unload(CDM::BioGearsNervousSystemData& data) const
   data.SympatheticSinoatrialSignalBaseline(m_SympatheticSinoatrialSignalBaseline_Hz);
   data.SympatheticPeripheralSignalFatigue(m_SympatheticPeripheralSignalFatigue);
   data.VagalSignalBaseline(m_VagalSignalBaseline_Hz);
-  data.WakeTime(m_WakeTime_min);
-  data.SleepTime(m_SleepTime_min);
-
-
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1181,6 +1176,9 @@ void Nervous::CalculateSleepEffects()
   //Calculate wake/sleep ratio to determine parameter scaling
   SESleep* sleep;
   CDM::enumSleepState::value sleepstate = sleep->GetSleepState();
+
+  double At = .5;   //Circadian rythm parameter
+
 
   double sleepRatio = m_WakeTime_min / m_SleepTime_min;
 

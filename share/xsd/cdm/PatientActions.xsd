@@ -382,13 +382,6 @@ specific language governing permissions and limitations under the License.
 		</xs:complexContent>
 	</xs:complexType>	
 
-	<!-- @brief start or stop a sleep action.  -->
-	<xs:simpleType name="enumSleepState">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="Alseep"/>
-			<xs:enumeration value="Awake"/>
-		</xs:restriction>
-	</xs:simpleType>	
 
 	<!-- @brief put the patient into a sleep state. Can also be used to awaken the patient from a sleep state. -->
     <xs:complexType name="SleepData">

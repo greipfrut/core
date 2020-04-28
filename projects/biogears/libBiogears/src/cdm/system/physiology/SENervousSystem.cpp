@@ -18,31 +18,35 @@ specific language governing permissions and limitations under the License.
 #include <biogears/container/Tree.tci.h>
 
 namespace biogears {
+constexpr char idComplianceScale[] = "ComplianceScale";
 constexpr char idHeartRateScale[] = "HeartRateScale";
 constexpr char idHeartElastanceScale[] = "HeartElastanceScale";
+constexpr char idPainVisualAnalogueScale[] = "PainVisualAnalogueScale";
+constexpr char idLeftEyePupillaryResponse[] = "LeftEyePupillaryResponse";
+constexpr char idRightEyePupillaryResponse[] = "RightEyePupillaryResponse";
 constexpr char idResistanceScaleExtrasplanchnic[] = "ResistanceScaleExtrasplanchnic";
 constexpr char idResistanceScaleMuscle[] = "ResistanceScaleMuscle";
 constexpr char idResistanceScaleMyocardium[] = "ResistanceScaleMyocardium";
 constexpr char idResistanceScaleSplanchnic[] = "ResistanceScaleSplanchnic";
-constexpr char idComplianceScale[] = "ComplianceScale";
-constexpr char idPainVisualAnalogueScale[] = "PainVisualAnalogueScale";
-constexpr char idLeftEyePupillaryResponse[] = "LeftEyePupillaryResponse";
-constexpr char idRightEyePupillaryResponse[] = "RightEyePupillaryResponse";
+constexpr char idSleepTime[] = "SleepTime";
+constexpr char idWakeTime[] = "WakeTime";
+
 
 SENervousSystem::SENervousSystem(Logger* logger)
   : SESystem(logger)
 {
+  m_ComplianceScale = nullptr;
   m_HeartRateScale = nullptr;
   m_HeartElastanceScale = nullptr;
-  m_ResistanceScaleExtrasplanchnic = nullptr;
-  m_ResistanceScaleMuscle = nullptr;
-  m_ResistanceScaleMyocardium = nullptr;
-  m_ResistanceScaleSplanchnic = nullptr;
-  m_ComplianceScale = nullptr;
-
   m_LeftEyePupillaryResponse = nullptr;
   m_RightEyePupillaryResponse = nullptr;
   m_PainVisualAnalogueScale = nullptr;
+  m_ResistanceScaleExtrasplanchnic = nullptr;
+  m_ResistanceScaleMuscle = nullptr;
+  m_ResistanceScaleMyocardium = nullptr;
+  m_SleepTime = nullptr;
+  m_SleepState = (CDM::enumSleepState::value) - 1;
+  m_WakeTime = nullptr;
 }
 //-------------------------------------------------------------------------------
 
@@ -65,6 +69,9 @@ void SENervousSystem::Clear()
   SAFE_DELETE(m_LeftEyePupillaryResponse);
   SAFE_DELETE(m_RightEyePupillaryResponse);
   SAFE_DELETE(m_PainVisualAnalogueScale);
+  SAFE_DELETE(m_SleepTime);
+  m_SleepState = (CDM::enumSleepState::value) - 1;
+  SAFE_DELETE(m_WakeTime);
 }
 //-------------------------------------------------------------------------------
 const SEScalar* SENervousSystem::GetScalar(const char* name)
@@ -90,6 +97,10 @@ const SEScalar* SENervousSystem::GetScalar(const std::string& name)
     return &GetComplianceScale();
   if (name == idPainVisualAnalogueScale)
     return &GetPainVisualAnalogueScale();
+  if (name == idSleepTime)
+    return &GetSleepTime();
+    if (name == idWakeTime)
+    return &GetWakeTime();
 
   size_t split = name.find('-');
   if (split != name.npos) {
@@ -127,6 +138,12 @@ bool SENervousSystem::Load(const CDM::NervousSystemData& in)
     GetLeftEyePupillaryResponse().Load(in.LeftEyePupillaryResponse().get());
   if (in.RightEyePupillaryResponse().present())
     GetRightEyePupillaryResponse().Load(in.RightEyePupillaryResponse().get());
+  if (in.SleepTime().present())
+    GetSleepTime().Load(in.SleepTime().get());
+  if (in.SleepState().present())
+    SetSleepState(in.SleepState().get());
+  if (in.WakeTime().present())
+    GetWakeTime().Load(in.WakeTime().get());
   return true;
 }
 //-------------------------------------------------------------------------------
@@ -162,6 +179,12 @@ void SENervousSystem::Unload(CDM::NervousSystemData& data) const
     data.LeftEyePupillaryResponse(std::unique_ptr<CDM::PupillaryResponseData>(m_LeftEyePupillaryResponse->Unload()));
   if (m_RightEyePupillaryResponse != nullptr)
     data.RightEyePupillaryResponse(std::unique_ptr<CDM::PupillaryResponseData>(m_RightEyePupillaryResponse->Unload()));
+  if (m_SleepTime != nullptr)
+    data.SleepTime(std::unique_ptr<CDM::ScalarData>(m_SleepTime->Unload()));
+  if (HasSleepState())
+    data.SleepState(m_SleepState);
+  if (m_WakeTime != nullptr)
+    data.WakeTime(std::unique_ptr<CDM::ScalarData>(m_SleepTime->Unload()));
 }
 
 //-------------------------------------------------------------------------------
@@ -366,7 +389,65 @@ void SENervousSystem::RemoveRightEyePupillaryResponse()
   SAFE_DELETE(m_RightEyePupillaryResponse);
 }
 //-------------------------------------------------------------------------------
+bool SENervousSystem::IsAsleep() const
+{
+  return m_SleepState == ((CDM::enumSleepState::Asleep)) ? true : false;
+}
+//-------------------------------------------------------------------------------
+SEScalar& SENervousSystem::GetSleepTime()
+{
+  if (m_SleepTime == nullptr)
+    m_SleepTime = new SEScalar();
+  return *m_SleepTime;
+}
+//-------------------------------------------------------------------------------
+double SENervousSystem::GetSleepTime() const
+{
+  if (m_SleepTime == nullptr)
+    return SEScalar::dNaN();
+  return m_SleepTime->GetValue();
+}
+//-------------------------------------------------------------------------------
 
+CDM::enumSleepState::value SENervousSystem::GetSleepState() const
+{
+  return m_SleepState;
+}
+//-------------------------------------------------------------------------------
+void SENervousSystem::SetSleepState(CDM::enumSleepState::value sleep)
+{
+  m_SleepState = sleep;
+}
+//-------------------------------------------------------------------------------
+void SENervousSystem::InvalidateSleepState()
+{
+  m_SleepState = (CDM::enumSleepState::value) - 1;
+}
+//-------------------------------------------------------------------------------
+bool SENervousSystem::HasSleepState() const
+{
+  return m_SleepState == ((CDM::enumSleepState::value) - 1) ? false : true;
+}
+//-------------------------------------------------------------------------------
+bool SENervousSystem::IsAwake() const
+{
+  return m_SleepState == ((CDM::enumSleepState::Awake)) ? true : false;
+}
+//-------------------------------------------------------------------------------
+SEScalar& SENervousSystem::GetWakeTime()
+{
+  if (m_WakeTime == nullptr)
+    m_WakeTime = new SEScalar();
+  return *m_WakeTime;
+}
+//-------------------------------------------------------------------------------
+double SENervousSystem::GetWakeTime() const
+{
+  if (m_WakeTime == nullptr)
+    return SEScalar::dNaN();
+  return m_WakeTime->GetValue();
+}
+//-------------------------------------------------------------------------------
 Tree<const char*> SENervousSystem::GetPhysiologyRequestGraph() const
 {
   return Tree<const char*>{ classname() }
@@ -379,6 +460,8 @@ Tree<const char*> SENervousSystem::GetPhysiologyRequestGraph() const
     .emplace_back(idComplianceScale)
     .emplace_back(idPainVisualAnalogueScale)
     .emplace_back(idLeftEyePupillaryResponse)
-    .emplace_back(idRightEyePupillaryResponse);
+    .emplace_back(idRightEyePupillaryResponse)
+    .emplace_back(idSleepTime)
+    .emplace_back(idWakeTime);
 }
 }
