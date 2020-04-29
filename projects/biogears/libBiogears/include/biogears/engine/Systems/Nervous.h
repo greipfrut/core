@@ -71,7 +71,7 @@ protected:
   void ChemoreceptorFeedback();
   void SetPupilEffects();
   void CalculateSleepEffects();
-
+  void UpdateSleepState();
   void AfferentResponse();
   void CentralSignalProcess();
   void EfferentResponse();

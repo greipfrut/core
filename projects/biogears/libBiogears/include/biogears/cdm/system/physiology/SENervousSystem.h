@@ -20,7 +20,9 @@ specific language governing permissions and limitations under the License.
 #include <biogears/schema/biogears/BioGearsPhysiology.hxx>
 
 namespace biogears {
-class BIOGEARS_API SENervousSystem : public SESystem {
+  class TimeUnit;
+
+  class BIOGEARS_API SENervousSystem : public SESystem {
 public:
   SENervousSystem(Logger* logger);
   ~SENervousSystem() override;
@@ -87,8 +89,8 @@ public:
   void RemoveRightEyePupillaryResponse();
 
   bool IsAsleep() const;
-  SEScalar& GetSleepTime();
-  double GetSleepTime() const;
+  SEScalarTime& GetSleepTime();
+  double GetSleepTime(const TimeUnit& unit) const;
 
   CDM::enumSleepState::value GetSleepState() const;
   void SetSleepState(CDM::enumSleepState::value sleep);
@@ -96,8 +98,8 @@ public:
   bool HasSleepState() const;
 
   bool IsAwake() const;
-  SEScalar& GetWakeTime();
-  double GetWakeTime() const;
+  SEScalarTime& GetWakeTime();
+  double GetWakeTime(const TimeUnit& unit) const;
 
 protected:
   SEScalar* m_ComplianceScale;
@@ -110,8 +112,8 @@ protected:
   SEScalar* m_ResistanceScaleMuscle;
   SEScalar* m_ResistanceScaleMyocardium;
   SEScalar* m_ResistanceScaleSplanchnic;
-  SEScalar* m_SleepTime;
-  SEScalar* m_WakeTime;
+  SEScalarTime* m_SleepTime;
+  SEScalarTime* m_WakeTime;
   CDM::enumSleepState::value m_SleepState;
 
 

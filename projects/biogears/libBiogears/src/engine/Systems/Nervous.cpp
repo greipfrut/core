@@ -13,6 +13,7 @@ specific language governing permissions and limitations under the License.
 
 #include <biogears/cdm/patient/SEPatient.h>
 #include <biogears/cdm/patient/actions/SEPupillaryResponse.h>
+#include <biogears/cdm/patient/actions/SESleep.h>
 #include <biogears/cdm/properties/SEScalar0To1.h>
 #include <biogears/cdm/properties/SEScalarAmountPerVolume.h>
 #include <biogears/cdm/properties/SEScalarFlowCompliance.h>
@@ -129,8 +130,8 @@ void Nervous::Initialize()
   GetRightEyePupillaryResponse().GetSizeModifier().SetValue(0);
   GetRightEyePupillaryResponse().GetReactivityModifier().SetValue(0);
   GetPainVisualAnalogueScale().SetValue(0.0);
-  GetWakeTime().SetValue(0.0);
-  GetSleepTime().SetValue(420.0);   //assume patient has had 8 hours of sleep before simulation starts
+  GetWakeTime().SetValue(0.0, TimeUnit::min);
+  GetSleepTime().SetValue(420.0, TimeUnit::min);   //assume patient has had 8 hours of sleep before simulation starts
 }
 
 bool Nervous::Load(const CDM::BioGearsNervousSystemData& in)
@@ -327,7 +328,7 @@ void Nervous::AtSteadyState()
 void Nervous::PreProcess()
 {
   CheckPainStimulus();
-
+  UpdateSleepState();
   AfferentResponse();
   CentralSignalProcess();
   EfferentResponse();
@@ -1182,12 +1183,15 @@ void Nervous::CalculateSleepEffects()
 
   double sleepRatio = m_WakeTime_min / m_SleepTime_min;
 
-  if(sleepstate = CDM::enumSleepState::Awake) {
+  if(sleepstate == CDM::enumSleepState::Awake) {
     m_WakeTime_min += m_dt_s;
   }
   else {
     m_SleepTime_min += m_dt_s;
   }
+
+  m_data.GetNervous().GetSleepTime().SetValue(m_SleepTime_min, TimeUnit::s);
+  m_data.GetNervous().GetSleepTime().SetValue(m_SleepTime_min, TimeUnit::s);
 
   //calculate sleep time scaling parameters: 
 
@@ -1199,4 +1203,26 @@ void Nervous::CalculateSleepEffects()
     //Store data 
    
 }
+}
+
+//--------------------------------------------------------------------------------------------------
+/// \brief
+/// Update global nervous sleep state  
+///
+/// \details
+/// Models for metabolic changes and vigalence and awareness changes are computed here.
+/// These models effect physiology data requests and the tissue system
+//--------------------------------------------------------------------------------------------------
+void biogears::Nervous::UpdateSleepState()
+{
+  //Calculate wake/sleep ratio to determine parameter scaling
+  SESleep* sleep;
+  CDM::enumSleepState::value sleepstate = sleep->GetSleepState();
+
+  if (sleepstate == CDM::enumSleepState::Asleep) {
+    m_SleepState = sleepstate;
+  }
+  else if(sleepstate == CDM::enumSleepState::Asleep) {
+    m_SleepState = sleepstate;
+  }
 }

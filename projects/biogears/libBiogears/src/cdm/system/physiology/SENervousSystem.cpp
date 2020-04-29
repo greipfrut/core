@@ -13,6 +13,7 @@ specific language governing permissions and limitations under the License.
 
 #include <biogears/cdm/properties/SEScalarFrequency.h>
 #include <biogears/cdm/properties/SEScalarLength.h>
+#include <biogears/cdm/properties/SEScalarTime.h>
 #include <biogears/cdm/properties/SEScalarPressurePerVolume.h>
 #include <biogears/cdm/substance/SESubstanceManager.h>
 #include <biogears/container/Tree.tci.h>
@@ -99,7 +100,7 @@ const SEScalar* SENervousSystem::GetScalar(const std::string& name)
     return &GetPainVisualAnalogueScale();
   if (name == idSleepTime)
     return &GetSleepTime();
-    if (name == idWakeTime)
+  if (name == idWakeTime)
     return &GetWakeTime();
 
   size_t split = name.find('-');
@@ -180,11 +181,11 @@ void SENervousSystem::Unload(CDM::NervousSystemData& data) const
   if (m_RightEyePupillaryResponse != nullptr)
     data.RightEyePupillaryResponse(std::unique_ptr<CDM::PupillaryResponseData>(m_RightEyePupillaryResponse->Unload()));
   if (m_SleepTime != nullptr)
-    data.SleepTime(std::unique_ptr<CDM::ScalarData>(m_SleepTime->Unload()));
+    data.SleepTime(std::unique_ptr<CDM::ScalarTimeData>(m_SleepTime->Unload()));
   if (HasSleepState())
     data.SleepState(m_SleepState);
   if (m_WakeTime != nullptr)
-    data.WakeTime(std::unique_ptr<CDM::ScalarData>(m_SleepTime->Unload()));
+    data.WakeTime(std::unique_ptr<CDM::ScalarTimeData>(m_WakeTime->Unload()));
 }
 
 //-------------------------------------------------------------------------------
@@ -394,14 +395,14 @@ bool SENervousSystem::IsAsleep() const
   return m_SleepState == ((CDM::enumSleepState::Asleep)) ? true : false;
 }
 //-------------------------------------------------------------------------------
-SEScalar& SENervousSystem::GetSleepTime()
+SEScalarTime& SENervousSystem::GetSleepTime()
 {
   if (m_SleepTime == nullptr)
-    m_SleepTime = new SEScalar();
+    m_SleepTime = new SEScalarTime();
   return *m_SleepTime;
 }
 //-------------------------------------------------------------------------------
-double SENervousSystem::GetSleepTime() const
+double SENervousSystem::GetSleepTime(const TimeUnit& unit) const
 {
   if (m_SleepTime == nullptr)
     return SEScalar::dNaN();
@@ -434,14 +435,14 @@ bool SENervousSystem::IsAwake() const
   return m_SleepState == ((CDM::enumSleepState::Awake)) ? true : false;
 }
 //-------------------------------------------------------------------------------
-SEScalar& SENervousSystem::GetWakeTime()
+SEScalarTime& SENervousSystem::GetWakeTime()
 {
   if (m_WakeTime == nullptr)
-    m_WakeTime = new SEScalar();
+    m_WakeTime = new SEScalarTime();
   return *m_WakeTime;
 }
 //-------------------------------------------------------------------------------
-double SENervousSystem::GetWakeTime() const
+double SENervousSystem::GetWakeTime(const TimeUnit& unit) const
 {
   if (m_WakeTime == nullptr)
     return SEScalar::dNaN();
