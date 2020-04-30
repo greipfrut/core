@@ -43,6 +43,7 @@ SENervousSystem::SENervousSystem(Logger* logger)
   m_RightEyePupillaryResponse = nullptr;
   m_PainVisualAnalogueScale = nullptr;
   m_ResistanceScaleExtrasplanchnic = nullptr;
+  m_ResistanceScaleSplanchnic = nullptr;
   m_ResistanceScaleMuscle = nullptr;
   m_ResistanceScaleMyocardium = nullptr;
   m_SleepTime = nullptr;

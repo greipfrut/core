@@ -15,7 +15,7 @@ namespace biogears
   SESleep::SESleep()
     : SEPatientAction()
   {
-     m_SleepState = (CDM::enumSleepState::value)-1;
+     m_SleepState = CDM::enumOnOff::Off;
   }
   //-------------------------------------------------------------------------------
   SESleep::~SESleep()
@@ -26,7 +26,7 @@ namespace biogears
   void SESleep::Clear()
   {
     SEPatientAction::Clear();
-    m_SleepState = (CDM::enumSleepState::value) - 1;
+    m_SleepState = CDM::enumOnOff::Off;;
   }
   //-------------------------------------------------------------------------------
   bool SESleep::IsValid() const
@@ -36,13 +36,13 @@ namespace biogears
   //-------------------------------------------------------------------------------
   bool SESleep::IsActive() const
   {
-    return m_SleepState == CDM::enumSleepState::Awake ? false : true;
+    return m_SleepState == CDM::enumOnOff::Off ? false : true;
   }
   //-------------------------------------------------------------------------------
   bool SESleep::Load(const CDM::SleepData& in)
   {
     SEPatientAction::Load(in);
-    m_SleepState = in.SleepState();
+    m_SleepState = in.Sleep();
     return true;
   }
   //-------------------------------------------------------------------------------
@@ -57,10 +57,10 @@ namespace biogears
   {
     SEPatientAction::Unload(data);
     if (HasSleepState())
-      data.SleepState(m_SleepState);
+      data.Sleep(m_SleepState);
   }
   //-------------------------------------------------------------------------------
-  CDM::enumSleepState SESleep::GetSleepState()
+  CDM::enumOnOff SESleep::GetSleepState()
   {
         return m_SleepState;
   }
@@ -70,7 +70,7 @@ namespace biogears
       return m_SleepState == ((CDM::enumSleepState::value) - 1) ? false : true;
   }
   //-------------------------------------------------------------------------------
-  void SESleep::SetSleepState(CDM::enumSleepState::value t) 
+  void SESleep::SetSleepState(CDM::enumOnOff::value t) 
   {
       m_SleepState = t;
   }

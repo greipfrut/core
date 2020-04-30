@@ -42,13 +42,13 @@ public:
 
 
   virtual bool HasSleepState() const;
-  virtual CDM::enumSleepState GetSleepState();
-  virtual void SetSleepState(CDM::enumSleepState::value t);
+  virtual CDM::enumOnOff GetSleepState();
+  virtual void SetSleepState(CDM::enumOnOff::value t);
 
   virtual void ToString(std::ostream& str) const override;
 
 protected:
-  CDM::enumSleepState::value m_SleepState;
+  CDM::enumOnOff::value m_SleepState;
 
 
 }; 

@@ -1175,23 +1175,22 @@ void Nervous::SetPupilEffects()
 void Nervous::CalculateSleepEffects()
 {
   //Calculate wake/sleep ratio to determine parameter scaling
-  SESleep* sleep;
-  CDM::enumSleepState::value sleepstate = sleep->GetSleepState();
+  m_SleepState = GetSleepState();
 
   double At = .5;   //Circadian rythm parameter
 
 
   double sleepRatio = m_WakeTime_min / m_SleepTime_min;
 
-  if(sleepstate == CDM::enumSleepState::Awake) {
+  if(m_SleepState == CDM::enumSleepState::Awake) {
     m_WakeTime_min += m_dt_s;
   }
-  else {
+  else if(m_SleepState == CDM::enumSleepState::Asleep) {
     m_SleepTime_min += m_dt_s;
   }
 
   m_data.GetNervous().GetSleepTime().SetValue(m_SleepTime_min, TimeUnit::s);
-  m_data.GetNervous().GetSleepTime().SetValue(m_SleepTime_min, TimeUnit::s);
+  m_data.GetNervous().GetWakeTime().SetValue(m_WakeTime_min, TimeUnit::s);
 
   //calculate sleep time scaling parameters: 
 
@@ -1215,14 +1214,18 @@ void Nervous::CalculateSleepEffects()
 //--------------------------------------------------------------------------------------------------
 void biogears::Nervous::UpdateSleepState()
 {
-  //Calculate wake/sleep ratio to determine parameter scaling
-  SESleep* sleep;
-  CDM::enumSleepState::value sleepstate = sleep->GetSleepState();
+  //Get the current sleep state
+  m_SleepState = GetSleepState();
 
-  if (sleepstate == CDM::enumSleepState::Asleep) {
-    m_SleepState = sleepstate;
+  //update state from the action
+  if (m_data.GetActions().GetPatientActions().HasSleepState() && m_data.GetActions().GetPatientActions().GetSleepState()->IsActive()) {
+    m_SleepState = CDM::enumSleepState::Asleep;
+    SetSleepState(m_SleepState);
+    return;
   }
-  else if(sleepstate == CDM::enumSleepState::Asleep) {
-    m_SleepState = sleepstate;
+  else {
+    m_SleepState = CDM::enumSleepState::Awake;
+    SetSleepState(m_SleepState);
   }
+  return;
 }

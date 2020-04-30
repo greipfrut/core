@@ -110,18 +110,16 @@
   </Action>
 
   <!-- Sleep for 4 hours each day during the study -->
-  <Action xsi:type="SleepData">
-    <SleepState value = "Asleep" />
-  </Action>
+<Action xsi:type="SleepData" Sleep="On"/>
+
 
   <Action xsi:type="AdvanceTimeData">
         <Time value="4" unit="hr"/>       
     </Action>
 
   <!-- Sleep for 4 hours each day during the study -->
-  <Action xsi:type="SleepData">
-    <SleepState value = "Awake" />
-  </Action>
+<Action xsi:type="SleepData" Sleep="Off"/>
+
 
 <!-- Patient wakes up at 5am, eats at 9 -->
   <Action xsi:type="AdvanceTimeData">
@@ -180,18 +178,15 @@
   </Action>
 
   <!-- Sleep for 4 hours each day during the study -->
-  <Action xsi:type="SleepData">
-    <SleepState value = "Asleep" />
-  </Action>
+<Action xsi:type="SleepData" Sleep="On"/>
 
   <Action xsi:type="AdvanceTimeData">
         <Time value="4" unit="hr"/>       
     </Action>
 
   <!-- Sleep for 4 hours each day during the study -->
-  <Action xsi:type="SleepData">
-    <SleepState value = "Awake" />
-  </Action>
+<Action xsi:type="SleepData" Sleep="Off"/>
+
 
 <!-- Patient wakes up at 5am, eats at 9 -->
   <Action xsi:type="AdvanceTimeData">
@@ -250,9 +245,8 @@
   </Action>
 
   <!-- Sleep for 4 hours each day during the study -->
-  <Action xsi:type="SleepData">
-    <SleepState value = "Asleep" />
-  </Action>
+<Action xsi:type="SleepData" Sleep="On"/>
+
 
   <Action xsi:type="AdvanceTimeData">
         <Time value="4" unit="hr"/>       
