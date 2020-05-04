@@ -33,6 +33,8 @@ specific language governing permissions and limitations under the License.
 
 #include <biogears/engine/BioGearsPhysiologyEngine.h>
 #include <biogears/engine/Controller/BioGears.h>
+#include "units.h"
+#include "biogears/math/angles.h"
 namespace BGE = mil::tatrc::physiology::biogears;
 
 #pragma warning(disable : 4786)
@@ -1177,10 +1179,14 @@ void Nervous::CalculateSleepEffects()
   //Calculate wake/sleep ratio to determine parameter scaling
   m_SleepState = GetSleepState();
 
-  double At = .5;   //Circadian rythm parameter
-
-
-  double sleepRatio = m_WakeTime_min / m_SleepTime_min;
+  double L0 = .25;   //Circadian rythm parameter with "normal" sleep
+  double L1 = 2.5;   //Circadian maximum 
+  double k = 1.5;   //Shape of circadian response 
+  double s = 4.3;   //x shift of the logistic respoinse curve
+  double sleepRatio = m_WakeTime_min / m_SleepTime_min;   //independat variable for circadian rythm equation
+  double at = 0.0;   //circadian rythm parameter
+  double ct = 0.0;   //circadian rythm value
+  double simTime_hr = m_data.GetSimulationTime().GetValue(TimeUnit::hr);
 
   if(m_SleepState == CDM::enumSleepState::Awake) {
     m_WakeTime_min += m_dt_s;
@@ -1188,6 +1194,12 @@ void Nervous::CalculateSleepEffects()
   else if(m_SleepState == CDM::enumSleepState::Asleep) {
     m_SleepTime_min += m_dt_s;
   }
+  
+  //calculate A 
+  at = (L1 / (1 + exp(-k * (sleepRatio - s)))) + L0;
+
+  //update circadian rythm: 
+  ct = 5.0 - at * sin((PI / 12.0)*simTime_hr*(1 / 24.0));
 
   m_data.GetNervous().GetSleepTime().SetValue(m_SleepTime_min, TimeUnit::s);
   m_data.GetNervous().GetWakeTime().SetValue(m_WakeTime_min, TimeUnit::s);
