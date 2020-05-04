@@ -101,6 +101,18 @@ public:
   SEScalarTime& GetWakeTime();
   double GetWakeTime(const TimeUnit& unit) const;
 
+  bool HasBiologicalDebt() const;
+  SEScalar& GetBiologicalDebt();
+  double GetBiologicalDebt() const;
+
+  bool HasReactionTime() const;
+  SEScalarTime& GetReactionTime();
+  double GetReactionTime(const TimeUnit& unit) const;
+
+  bool HasAttentionLapses() const;
+  SEScalar& GetAttentionLapses();
+  double GetAttentionLapses() const;
+
 protected:
   SEScalar* m_ComplianceScale;
   SEScalar* m_HeartRateScale;
@@ -115,6 +127,10 @@ protected:
   SEScalarTime* m_SleepTime;
   SEScalarTime* m_WakeTime;
   CDM::enumSleepState::value m_SleepState;
+  SEScalar* m_BiologicalDebt;
+  SEScalarTime* m_ReactionTime;
+  SEScalar* m_AttentionLapses;
+
 
 
 
