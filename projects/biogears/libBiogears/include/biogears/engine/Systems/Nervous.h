@@ -81,9 +81,11 @@ protected:
   double m_AfferentChemoreceptor_Hz; //*AC
   double m_AfferentPulmonaryStretchReceptor_Hz; //*AP
   double m_AorticBaroreceptorStrain;
+  double m_AttentionLapses;
   double m_ArterialOxygenBaseline_mmHg;
   double m_ArterialCarbonDioxideBaseline_mmHg;
   double m_BaroreceptorOperatingPoint_mmHg;
+  double m_BiologicalDebt;
   double m_CardiopulmonaryInputBaseline_mmHg;
   double m_CardiopulmonaryInput_mmHg;
   double m_CarotidBaroreceptorStrain;
