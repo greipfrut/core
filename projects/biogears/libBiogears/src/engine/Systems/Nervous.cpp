@@ -136,7 +136,7 @@ void Nervous::Initialize()
   GetRightEyePupillaryResponse().GetReactivityModifier().SetValue(0);
   GetPainVisualAnalogueScale().SetValue(0.0);
   GetWakeTime().SetValue(0.0, TimeUnit::min);
-  GetSleepTime().SetValue(420.0, TimeUnit::min);   //assume patient has had 8 hours of sleep before simulation starts
+  GetSleepTime().SetValue(25200, TimeUnit::s);   //assume patient has had 8 hours of sleep before simulation starts
 }
 
 bool Nervous::Load(const CDM::BioGearsNervousSystemData& in)
@@ -288,8 +288,8 @@ void Nervous::SetUp()
   m_SympatheticSinoatrialSignal_Hz = 4.0;
   m_SympatheticPeripheralSignal_Hz = 4.8;
   m_VagalSignal_Hz = 0.80;
-  m_WakeTime_min = 0.0;
-  m_SleepTime_min = 420.0;   //assume patient has had 8 hours of sleep before simulation starts
+ // m_WakeTime_min = 0.0;
+ // m_SleepTime_min = 420.0;   //assume patient has had 8 hours of sleep before simulation starts
 
 }
 
@@ -1184,7 +1184,10 @@ void Nervous::CalculateSleepEffects()
 {
   //Calculate wake/sleep ratio to determine parameter scaling
   m_SleepState = GetSleepState();
+  m_SleepTime_min = GetSleepTime().GetValue(TimeUnit::min);   //update value from last computation
+  m_WakeTime_min = GetWakeTime().GetValue(TimeUnit::min);   //update value from last computation
   m_BiologicalDebt = GetBiologicalDebt().GetValue();   //update value from last computation
+  m_AttentionLapses = GetAttentionLapses().GetValue();
 
   const double L0 = .25;   //Circadian rythm parameter with "normal" sleep
   const double L1 = 2.25;   //Circadian maximum 
@@ -1226,10 +1229,10 @@ void Nervous::CalculateSleepEffects()
   m_BiologicalDebt = m_BiologicalDebt + m_dt_s * (pw*rwt + pb1 * rbt*m_BiologicalDebt - rbt * xt);
 
   if (m_SleepState == CDM::enumSleepState::Awake) {
-    m_WakeTime_min += m_dt_s;
+    m_WakeTime_min += (m_dt_s / 60);
   }
   else if (m_SleepState == CDM::enumSleepState::Asleep) {
-    m_SleepTime_min += m_dt_s;
+    m_SleepTime_min += (m_dt_s / 60);
   }
 
   //Calculate alertness metric 
@@ -1242,8 +1245,8 @@ void Nervous::CalculateSleepEffects()
   }
 
     //Store data 
-  GetSleepTime().SetValue(m_SleepTime_min, TimeUnit::s);
-  GetWakeTime().SetValue(m_WakeTime_min, TimeUnit::s);
+  GetSleepTime().SetValue(m_SleepTime_min, TimeUnit::min);
+  GetWakeTime().SetValue(m_WakeTime_min, TimeUnit::min);
   GetBiologicalDebt().SetValue(m_BiologicalDebt);
   GetAttentionLapses().SetValue(m_AttentionLapses);
 

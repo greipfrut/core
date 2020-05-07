@@ -92,6 +92,10 @@ const SEScalar* SENervousSystem::GetScalar(const char* name)
 //-------------------------------------------------------------------------------
 const SEScalar* SENervousSystem::GetScalar(const std::string& name)
 {
+  if (name == idAttentionLapses)
+    return &GetAttentionLapses();
+  if (name == idBiologicalDebt)
+    return &GetBiologicalDebt();
   if (name == idHeartRateScale)
     return &GetHeartRateScale();
   if (name == idHeartElastanceScale)
