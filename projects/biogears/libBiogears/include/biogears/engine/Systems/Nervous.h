@@ -114,6 +114,7 @@ protected:
   double m_PeripheralBloodGasInteractionBaseline_Hz;
   double m_PeripheralFrequencyDelta_Per_min;
   double m_PeripheralPressureDelta_cmH2O;
+  double m_ReactionTime_s;
   double m_ResistanceModifierExtrasplanchnic;
   double m_ResistanceModifierMuscle;
   double m_ResistanceModifierSplanchnic;

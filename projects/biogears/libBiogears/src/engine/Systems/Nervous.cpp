@@ -110,12 +110,14 @@ void Nervous::Initialize()
   m_MuscleOxygenBaseline = m_data.GetCompartments().GetIntracellularFluid(*m_data.GetCompartments().GetTissueCompartment(BGE::TissueCompartment::Muscle)).GetSubstanceQuantity(m_data.GetSubstances().GetO2())->GetMolarity(AmountPerVolumeUnit::mmol_Per_L);
   m_OxygenAutoregulatorHeart = 0.0;
   m_OxygenAutoregulatorMuscle = 0.0;
+  m_ReactionTime_s = 0.3;
   m_ResistanceModifierExtrasplanchnic = 1.02;
   m_ResistanceModifierMuscle = 1.02;
   m_ResistanceModifierSplanchnic = 0.24;
   m_PeripheralBloodGasInteractionBaseline_Hz = 0.0;
   m_PeripheralFrequencyDelta_Per_min = 0.0;
   m_PeripheralPressureDelta_cmH2O = 0.0;
+  m_SleepTime_min = m_data.GetPatient().GetSleepAmount(TimeUnit::min);
   m_SympatheticPeripheralSignalBaseline_Hz = 4.05;
   m_SympatheticSinoatrialSignalBaseline_Hz = 4.5;
   m_SympatheticPeripheralSignalFatigue = 0.0;
@@ -125,6 +127,7 @@ void Nervous::Initialize()
   GetBiologicalDebt().SetValue(0.0);
   GetHeartRateScale().SetValue(1.0);
   GetHeartElastanceScale().SetValue(1.0);
+  GetReactionTime().SetValue(0.3, TimeUnit::s);
   GetResistanceScaleExtrasplanchnic().SetValue(1.0);
   GetResistanceScaleMuscle().SetValue(1.0);
   GetResistanceScaleMyocardium().SetValue(1.0);
@@ -1208,9 +1211,11 @@ void Nervous::CalculateSleepEffects()
   double rwSleepScale = 0.01;
   double rbSleepScale = 1.1;
 
-  //alert constants
+  //alert/reactiontime constants
   const double aSlope = 0.9;
   const double aIntercept = 4.2;
+  const double rIntercept = 300.0;
+  const double rSlope = 16.67;
   double tempTime_hr = 0.0;
   
 
@@ -1238,17 +1243,24 @@ void Nervous::CalculateSleepEffects()
   //Calculate alertness metric 
   if(sleepRatio > 3.0 && m_SleepState == CDM::enumSleepState::Awake) {
     m_AttentionLapses = aSlope * tempTime_hr + aIntercept;
+    m_ReactionTime_s = rSlope * tempTime_hr + rIntercept;
     tempTime_hr += m_dt_s / 3600.0;
   }
-  else {
+  else if (m_SleepTime_min > 30.0) {   //reset after at least 30 minutes of rest
     m_AttentionLapses = 3.0;   //stays constant for any well rested combination
+    m_ReactionTime_s = 0.3;   //stays constant for any well rested combination
+    tempTime_hr = 0.0;   //since we don't know what rapid sleep bouts do to attention lapses we will assume it resets the clock
   }
+
+
 
     //Store data 
   GetSleepTime().SetValue(m_SleepTime_min, TimeUnit::min);
   GetWakeTime().SetValue(m_WakeTime_min, TimeUnit::min);
   GetBiologicalDebt().SetValue(m_BiologicalDebt);
   GetAttentionLapses().SetValue(m_AttentionLapses);
+  GetReactionTime().SetValue(m_ReactionTime_s / 1000.0, TimeUnit::s);   //reaction time is computed in ms but we don't spport that time unit
+
 
 }
 }
