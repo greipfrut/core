@@ -1203,7 +1203,6 @@ void Nervous::CalculateSleepEffects()
   double simTime_hr = m_data.GetSimulationTime().GetValue(TimeUnit::hr);
 
   //consts involved in the ODE 
-  double xt = ct * (m_BiologicalDebt / (1 + std::pow(m_BiologicalDebt , 2)));
   const double pw = 0.13;
   const double pb1 = 1.7;
   double rwt = 0.06;
@@ -1229,6 +1228,8 @@ void Nervous::CalculateSleepEffects()
 
   //update circadian rythm: 
   ct = 5.0 - at * sin((PI / 12.0)*simTime_hr*(1 / 24.0));
+  double xt = ct * (m_BiologicalDebt / (1 + std::pow(m_BiologicalDebt, 2)));
+
 
   //take a forward time step
   m_BiologicalDebt = m_BiologicalDebt + m_dt_s * (pw*rwt + pb1 * rbt*m_BiologicalDebt - rbt * xt);

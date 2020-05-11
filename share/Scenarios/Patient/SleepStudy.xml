@@ -18,35 +18,11 @@
     <DataRequest xsi:type="PhysiologyDataRequestData" Name="HemoglobinContent"                 Unit="g"           Precision="0"/>
     <DataRequest xsi:type="PhysiologyDataRequestData" Name="CentralVenousPressure"             Unit="mmHg"        Precision="2"/>
     <DataRequest xsi:type="PhysiologyDataRequestData" Name="SystemicVascularResistance" Unit="mmHg s/mL" Precision="3"/>
+    <DataRequest xsi:type="PhysiologyDataRequestData" Name="SleepTime"                         Unit="s"       Precision="2"/>
+    <DataRequest xsi:type="PhysiologyDataRequestData" Name="WakeTime"                 Unit="s"          Precision="1"/>
+    <DataRequest xsi:type="PhysiologyDataRequestData" Name="BiologicalDebt"                 Unit="unitless"          Precision="8"/>
+    <DataRequest xsi:type="PhysiologyDataRequestData" Name="AttentionLapses"                 Unit="uniteless"          Precision="1"/>
 
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="TidalVolume"                       Unit="mL"          Precision="3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="RespirationRate"                   Unit="1/min"       Precision="2"/>
-
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="CoreTemperature"                   Unit="degC"        Precision="1"/>
-
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="RespiratoryExchangeRatio"          Unit="unitless"    Precision="3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="OxygenConsumptionRate"             Unit="mL/min"      Precision="3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="CarbonDioxideProductionRate"       Unit="mL/min"      Precision="3"/>
-
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="GlomerularFiltrationRate"          Unit="mL/min"      Precision="0"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="UrineProductionRate"               Unit="mL/min"      Precision="3"/>
-
-    <DataRequest xsi:type="SubstanceDataRequestData" Substance="Lactate" Name="MassInBody" Unit="mg" Precision="2"/>
-    <DataRequest xsi:type="SubstanceDataRequestData" Substance="Lactate" Name="MassInBlood" Unit="mg" Precision="2"/>
-    <DataRequest xsi:type="SubstanceDataRequestData" Substance="Lactate" Name="MassInTissue" Unit="mg" Precision="2"/>
-    <DataRequest xsi:type="SubstanceDataRequestData" Substance="Lactate" Name="Clearance-RenalFiltrationRate" Unit="mg/min" Precision="2"/>
-    <DataRequest xsi:type="SubstanceDataRequestData" Substance="Lactate" Name="Clearance-RenalReabsorptionRate" Unit="mg/min" Precision="2"/>
-    <DataRequest xsi:type="SubstanceDataRequestData" Substance="Lactate" Name="BloodConcentration" Unit="mg/L" Precision="2"/>
-    <DataRequest xsi:type="LiquidCompartmentDataRequestData" Compartment="MuscleTissueIntracellular" Substance="Lactate"    Name="Concentration" Unit="mg/L" Precision="2"/>
-    <DataRequest xsi:type="LiquidCompartmentDataRequestData" Compartment="MuscleTissueExtracellular" Substance="Lactate"    Name="Concentration" Unit="mg/L" Precision="2"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="MeanUrineOutput"               Unit="mL/min"      Precision="3"/>
-    <DataRequest xsi:type="LiquidCompartmentDataRequestData" Compartment="Aorta" Substance="Albumin"       Name="Concentration" Unit="g/dL"    Precision="2"/>
-    <DataRequest xsi:type="LiquidCompartmentDataRequestData" Compartment="Aorta" Substance="Lactate"       Name="Molarity" Unit="mmol/L"    Precision="2"/>
-
-    <DataRequest Substance="Epinephrine" Name="BloodConcentration" xsi:type="SubstanceDataRequestData" Unit="ug/L" Precision="6"/>
-    <DataRequest xsi:type="SubstanceDataRequestData" Substance="Lactate" Name="BloodConcentration" Unit="mg/dL" Precision="3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="TotalBilirubin" Unit="mg/dL" Precision="3"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="EnergyDeficit" Unit="W" Precision="3"/>
 
 
     <!-- Specific to this scenario -->
