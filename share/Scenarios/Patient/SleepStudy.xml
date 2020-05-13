@@ -20,7 +20,7 @@
     <DataRequest xsi:type="PhysiologyDataRequestData" Name="SystemicVascularResistance" Unit="mmHg s/mL" Precision="3"/>
     <DataRequest xsi:type="PhysiologyDataRequestData" Name="SleepTime"                         Unit="s"       Precision="2"/>
     <DataRequest xsi:type="PhysiologyDataRequestData" Name="WakeTime"                 Unit="s"          Precision="1"/>
-    <DataRequest xsi:type="PhysiologyDataRequestData" Name="BiologicalDebt"                 Unit="unitless"          Precision="8"/>
+    <DataRequest xsi:type="PhysiologyDataRequestData" Name="BiologicalDebt"                 Unit="unitless"          Precision="12"/>
     <DataRequest xsi:type="PhysiologyDataRequestData" Name="AttentionLapses"                 Unit="uniteless"          Precision="1"/>
 
 

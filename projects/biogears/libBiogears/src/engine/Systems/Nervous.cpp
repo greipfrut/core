@@ -1203,12 +1203,12 @@ void Nervous::CalculateSleepEffects()
   double simTime_hr = m_data.GetSimulationTime().GetValue(TimeUnit::hr);
 
   //consts involved in the ODE 
-  const double pw = 0.13;
+  const double pw = 0.3;//0.13;
   const double pb1 = 1.7;
   double rwt = 0.06;
-  double rbt = 0.28;
-  double rwSleepScale = 0.01;
-  double rbSleepScale = 1.1;
+  double rbt = 0.018; //0.28
+  double rwSleepScale = 0.5;
+  double rbSleepScale = 0.8;//1.1;
 
   //alert/reactiontime constants
   const double aSlope = 0.9;
@@ -1230,9 +1230,16 @@ void Nervous::CalculateSleepEffects()
   ct = 5.0 - at * sin((PI / 12.0)*simTime_hr*(1 / 24.0));
   double xt = ct * (m_BiologicalDebt / (1 + std::pow(m_BiologicalDebt, 2)));
 
+  double ct2 = 5.0 - at * sin((PI / 12.0)*(simTime_hr + m_dt_s)*(1 / 24.0));
+  double k1 = pw * rwt + pb1 * rbt*m_BiologicalDebt - rbt * xt;
+  double xt2 = ct * ((m_BiologicalDebt + m_dt_s * k1) / (1 + std::pow(m_BiologicalDebt + m_dt_s * k1, 2)));
+  double k2 = pw * rwt + pb1 * rbt*(m_BiologicalDebt + m_dt_s * k1) - rbt * xt2;
 
   //take a forward time step
-  m_BiologicalDebt = m_BiologicalDebt + m_dt_s * (pw*rwt + pb1 * rbt*m_BiologicalDebt - rbt * xt);
+  //m_BiologicalDebt = m_BiologicalDebt + m_dt_s * (pw*rwt + pb1 * rbt*m_BiologicalDebt - rbt * xt);
+
+  //lets try an improved scheme
+  m_BiologicalDebt = m_BiologicalDebt + m_dt_s * 0.5*(k1 +  k2);
 
   if (m_SleepState == CDM::enumSleepState::Awake) {
     m_WakeTime_min += (m_dt_s / 60);
@@ -1246,11 +1253,6 @@ void Nervous::CalculateSleepEffects()
     m_AttentionLapses = aSlope * tempTime_hr + aIntercept;
     m_ReactionTime_s = rSlope * tempTime_hr + rIntercept;
     tempTime_hr += m_dt_s / 3600.0;
-  }
-  else if (m_SleepTime_min > 30.0) {   //reset after at least 30 minutes of rest
-    m_AttentionLapses = 3.0;   //stays constant for any well rested combination
-    m_ReactionTime_s = 0.3;   //stays constant for any well rested combination
-    tempTime_hr = 0.0;   //since we don't know what rapid sleep bouts do to attention lapses we will assume it resets the clock
   }
 
 
