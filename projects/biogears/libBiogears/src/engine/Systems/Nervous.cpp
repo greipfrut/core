@@ -1204,11 +1204,11 @@ void Nervous::CalculateSleepEffects()
 
   //consts involved in the ODE 
   const double pw = 0.3;//0.13;
-  const double pb1 = 1.7;
-  double rwt = 0.06;
-  double rbt = 0.018; //0.28
-  double rwSleepScale = 0.5;
-  double rbSleepScale = 0.8;//1.1;
+  const double pb1 = 1.9;
+  double rwt = 0.07;
+  double rbt = 0.02;//0.018; //0.28
+  double rwSleepScale = 0.4;
+  double rbSleepScale = 1.1;
 
   //alert/reactiontime constants
   const double aSlope = 0.9;
@@ -1219,8 +1219,8 @@ void Nervous::CalculateSleepEffects()
   
 
   if (m_SleepState == CDM::enumSleepState::Asleep) {
-    rwt = 0.06 * rwSleepScale;
-    rbt = 0.28 * rbSleepScale;
+    rwt *= rwSleepScale;
+    rbt *= rbSleepScale;
   }
 
   //calculate A 
@@ -1255,7 +1255,7 @@ void Nervous::CalculateSleepEffects()
     tempTime_hr += m_dt_s / 3600.0;
   }
 
-
+  m_data.GetDataTrack().Probe("temptime", tempTime_hr);
 
     //Store data 
   GetSleepTime().SetValue(m_SleepTime_min, TimeUnit::min);
