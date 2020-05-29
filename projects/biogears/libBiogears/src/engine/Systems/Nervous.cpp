@@ -121,6 +121,7 @@ void Nervous::Initialize()
   m_SympatheticPeripheralSignalBaseline_Hz = 4.05;
   m_SympatheticSinoatrialSignalBaseline_Hz = 4.5;
   m_SympatheticPeripheralSignalFatigue = 0.0;
+  m_TiredTime_hr = 0.0;
   m_VagalSignalBaseline_Hz = 3.75;
 
   GetAttentionLapses().SetValue(3.0);
@@ -139,7 +140,7 @@ void Nervous::Initialize()
   GetRightEyePupillaryResponse().GetReactivityModifier().SetValue(0);
   GetPainVisualAnalogueScale().SetValue(0.0);
   GetWakeTime().SetValue(0.0, TimeUnit::min);
-  GetSleepTime().SetValue(25200, TimeUnit::s);   //assume patient has had 8 hours of sleep before simulation starts
+  GetSleepTime().SetValue(m_SleepTime_min, TimeUnit::min);
 }
 
 bool Nervous::Load(const CDM::BioGearsNervousSystemData& in)
@@ -308,6 +309,7 @@ void Nervous::AtSteadyState()
     m_SympatheticPeripheralSignalBaseline_Hz = m_SympatheticPeripheralSignal_Hz;
     m_SympatheticSinoatrialSignalBaseline_Hz = m_SympatheticSinoatrialSignal_Hz;
     m_VagalSignalBaseline_Hz = m_VagalSignal_Hz;
+    m_SleepTime_min = m_Patient->GetSleepAmount().GetValue(TimeUnit::min);
   }
 
   // The set-points (Baselines) get reset at the end of each stabilization period.
@@ -1205,8 +1207,8 @@ void Nervous::CalculateSleepEffects()
   //consts involved in the ODE 
   const double pw = 0.3;//0.13;
   const double pb1 = 1.9;
-  double rwt = 0.07;
-  double rbt = 0.02;//0.018; //0.28
+  double rwt = 0.05;
+  double rbt = 0.018;//0.018; //0.28
   double rwSleepScale = 0.4;
   double rbSleepScale = 1.1;
 
@@ -1215,7 +1217,6 @@ void Nervous::CalculateSleepEffects()
   const double aIntercept = 4.2;
   const double rIntercept = 300.0;
   const double rSlope = 16.67;
-  double tempTime_hr = 0.0;
   
 
   if (m_SleepState == CDM::enumSleepState::Asleep) {
@@ -1224,19 +1225,16 @@ void Nervous::CalculateSleepEffects()
   }
 
   //calculate A 
-  at = (L1 / (1 + exp(-k * (sleepRatio - s)))) + L0;
+  at = 0.4*(L1 / (1 + exp(-k * (sleepRatio - s)))) + L0;
 
   //update circadian rythm: 
-  ct = 5.0 - at * sin((PI / 12.0)*simTime_hr*(1 / 24.0));
+  ct = 5.1 - at * sin((PI / 12.0)*simTime_hr*(1 / 24.0));
   double xt = ct * (m_BiologicalDebt / (1 + std::pow(m_BiologicalDebt, 2)));
 
   double ct2 = 5.0 - at * sin((PI / 12.0)*(simTime_hr + m_dt_s)*(1 / 24.0));
   double k1 = pw * rwt + pb1 * rbt*m_BiologicalDebt - rbt * xt;
   double xt2 = ct * ((m_BiologicalDebt + m_dt_s * k1) / (1 + std::pow(m_BiologicalDebt + m_dt_s * k1, 2)));
   double k2 = pw * rwt + pb1 * rbt*(m_BiologicalDebt + m_dt_s * k1) - rbt * xt2;
-
-  //take a forward time step
-  //m_BiologicalDebt = m_BiologicalDebt + m_dt_s * (pw*rwt + pb1 * rbt*m_BiologicalDebt - rbt * xt);
 
   //lets try an improved scheme
   m_BiologicalDebt = m_BiologicalDebt + m_dt_s * 0.5*(k1 +  k2);
@@ -1250,12 +1248,15 @@ void Nervous::CalculateSleepEffects()
 
   //Calculate alertness metric 
   if(sleepRatio > 3.0 && m_SleepState == CDM::enumSleepState::Awake) {
-    m_AttentionLapses = aSlope * tempTime_hr + aIntercept;
-    m_ReactionTime_s = rSlope * tempTime_hr + rIntercept;
-    tempTime_hr += m_dt_s / 3600.0;
+    m_AttentionLapses = aSlope * m_TiredTime_hr + aIntercept;
+    m_ReactionTime_s = rSlope * m_TiredTime_hr + rIntercept;
+    m_TiredTime_hr += m_dt_s / 3600.0;
   }
 
-  m_data.GetDataTrack().Probe("temptime", tempTime_hr);
+  m_data.GetDataTrack().Probe("temptime", m_TiredTime_hr);
+  m_data.GetDataTrack().Probe("a", at);
+  m_data.GetDataTrack().Probe("sleepratio", sleepRatio);
+
 
     //Store data 
   GetSleepTime().SetValue(m_SleepTime_min, TimeUnit::min);

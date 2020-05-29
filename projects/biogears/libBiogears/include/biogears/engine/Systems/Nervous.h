@@ -121,6 +121,7 @@ protected:
   double m_SympatheticPeripheralSignalBaseline_Hz;
   double m_SympatheticSinoatrialSignalBaseline_Hz;
   double m_SympatheticPeripheralSignalFatigue;
+  double m_TiredTime_hr;
   double m_VagalSignalBaseline_Hz;
   double m_WakeTime_min;
   double m_SleepTime_min;

@@ -216,6 +216,8 @@ void Endocrine::SynthesizeInsulin()
 
   diabetesScale *= metabolicScaling;
 
+  m_data.GetDataTrack().Probe("metabolicScaling", metabolicScaling);
+
   // 2.0 = upperConcentration_g_Per_L
   // 0.3 = lowerConcentration_g_Per_l
   // 65.421 = amplitudeRate_mU_Per_min
