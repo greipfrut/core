@@ -211,7 +211,7 @@ void Endocrine::SynthesizeInsulin()
   }
 
   //super simple scaling factor for now:
-  metabolicScaling = 100.0 * ((biologicalDebt / m_averageBiologicalDebt) - 1.0);
+  metabolicScaling = (19.0 / 0.07) * (biologicalDebt - 0.28) + 1.0;
   metabolicScaling = std::min(metabolicScaling, 0.0);
 
   diabetesScale *= metabolicScaling;
